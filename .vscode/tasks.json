@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Maven tests - all apps",
+			"type": "shell",
+			"command": "powershell -NoProfile -Command \"$ErrorActionPreference='Stop'; $root='c:\\Users\\User\\Downloads\\Architecture_Implementation_Visual_Studio_Code'; $javaHome='C:\\Users\\User\\.vscode\\extensions\\redhat.java-1.58.0-win32-x64\\jre\\25.0.4.1-win32-x86_64'; $maven='C:\\Users\\User\\Tools\\apache-maven-3.9.9\\bin'; $env:JAVA_HOME=$javaHome; $env:PATH=\"$javaHome\\bin;$maven;$env:PATH\"; foreach ($d in Get-ChildItem -Path $root -Directory) { $pom = Join-Path $d.FullName 'pom.xml'; if (Test-Path $pom) { Write-Host \\\"===== $($d.Name) =====\\\"; Push-Location $d.FullName; & \\\"$maven\\mvn.cmd\\\" test -q; if ($LASTEXITCODE -ne 0) { Pop-Location; exit $LASTEXITCODE }; Pop-Location } }\"",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "Maven tests - all apps",
+			"type": "shell",
+			"command": "powershell -NoProfile -Command \"$ErrorActionPreference='Stop'; $root='C:\\Users\\User\\Downloads\\Architecture_Implementation_Visual_Studio_Code'; $javaHome='C:\\Users\\User\\.vscode\\extensions\\redhat.java-1.58.0-win32-x64\\jre\\25.0.4.1-win32-x86_64'; $maven='C:\\Users\\User\\Tools\\apache-maven-3.9.9\\bin'; $env:JAVA_HOME=$javaHome; $env:PATH=($javaHome + '\\bin;' + $maven + ';' + $env:PATH); Get-ChildItem -Path $root -Directory | ForEach-Object { $pom = Join-Path $_.FullName 'pom.xml'; if (Test-Path $pom) { Write-Host ('=====' + $_.Name + '====='); Push-Location $_.FullName; & (Join-Path $maven 'mvn.cmd') test -q; if ($LASTEXITCODE -ne 0) { Pop-Location; exit $LASTEXITCODE }; Pop-Location } }\"",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		}
+	]
+}

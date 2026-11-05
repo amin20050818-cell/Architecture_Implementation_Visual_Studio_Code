@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: book-service}
+  template:
+    metadata:
+      labels: {app: book-service}
+    spec:
+      containers:
+        - name: app
+          image: book-service:1.0
+          ports: [{containerPort: 8084}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 256Mi}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: book-service-hpa
+spec:
+  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: book-service}
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target: {type: Utilization, averageUtilization: 70}
